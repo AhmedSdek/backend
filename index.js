@@ -16,19 +16,21 @@ const port = process.env.PORT || 3000;
 const server = http.createServer(app);
 
 // إعداد Socket.IO وربطه بالخادم
+// const io = new Server(server, {
+//     cors: {
+//         origin: "http://localhost:5173", // عنوان React أو الواجهة الأمامية
+//         methods: ["GET", "POST"],
+//     },
+// });
 const io = new Server(server, {
     cors: {
-        origin: "http://localhost:5173", // عنوان React أو الواجهة الأمامية
+        origin: "http://localhost:5173", // رابط Vercel الخاص بالواجهة الأمامية
         methods: ["GET", "POST"],
     },
+    transports: ["websocket", "polling"], // السماح بالنقل عبر WebSocket وPolling
 });
-
 // Middleware
 app.use(cors());
-// app.use(cors({
-//     origin: "http://localhost:5173", // أو رابط Vercel الخاص بالواجهة الأمامية
-//     methods: ["GET", "POST"],
-// }));
 app.use(express.json());
 app.get("/", (req, res) => {
     res.send("Hello, World!");
