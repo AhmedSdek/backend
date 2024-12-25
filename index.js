@@ -25,10 +25,14 @@ const io = new Server(server, {
 
 // Middleware
 app.use(cors());
+// app.use(cors({
+//     origin: "http://localhost:5173", // أو رابط Vercel الخاص بالواجهة الأمامية
+//     methods: ["GET", "POST"],
+// }));
 app.use(express.json());
-app.get("/", (req, res) => {
-    res.send("Hello, World!");
-});
+// app.get("/", (req, res) => {
+//     res.send("Hello, World!");
+// });
 // المسارات
 app.use('/user', userRouter);
 app.use('/cart', cartRouter);
