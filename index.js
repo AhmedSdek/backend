@@ -30,9 +30,9 @@ app.use(cors());
 //     methods: ["GET", "POST"],
 // }));
 app.use(express.json());
-// app.get("/", (req, res) => {
-//     res.send("Hello, World!");
-// });
+app.get("/", (req, res) => {
+    res.send("Hello, World!");
+});
 // المسارات
 app.use('/user', userRouter);
 app.use('/cart', cartRouter);
