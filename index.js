@@ -16,33 +16,33 @@ const port = process.env.PORT || 3000;
 const server = http.createServer(app);
 
 // إعداد Socket.IO وربطه بالخادم
-const io = new Server(server, {
-    cors: {
-        origin: "http://localhost:5173", // عنوان React أو الواجهة الأمامية
-        methods: ["GET", "POST"],
-    },
-});
+// const io = new Server(server, {
+//     cors: {
+//         origin: "http://localhost:5173", // عنوان React أو الواجهة الأمامية
+//         methods: ["GET", "POST"],
+//     },
+// });
 
 // Middleware
-app.use(cors());
-app.use(express.json());
+// app.use(cors());
+// app.use(express.json());
 app.get("/", (req, res) => {
     res.send("Hello, World!");
 });
 // المسارات
-app.use('/user', userRouter);
-app.use('/cart', cartRouter);
-app.use('/api/menu', menuRouter);
+// app.use('/user', userRouter);
+// app.use('/cart', cartRouter);
+// app.use('/api/menu', menuRouter);
 
 // الاتصال بقاعدة البيانات
-mongoose
-    .connect(process.env.DB_URL)
-    .then(() => console.log("Connected!"))
-    .catch((err) => console.log(err));
+// mongoose
+//     .connect(process.env.DB_URL)
+//     .then(() => console.log("Connected!"))
+//     .catch((err) => console.log(err));
 
 
 // مشاركة io مع مسار الطلبات
-app.set('socketio', io);
+// app.set('socketio', io);
 // بدء تشغيل الخادم
 server.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
