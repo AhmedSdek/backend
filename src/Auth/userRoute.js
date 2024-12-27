@@ -56,43 +56,46 @@ router.get('/all-orders',
             res.status(500).send(err)
         }
     });
-router.put('/:id',
-    validatejwt
-    , async (req, res) => {
-        try {
-            const { id } = req.params;
-            const { status } = req.body;
-            const updateProduct = await orderModel.findByIdAndUpdate(id, status, { new: true });
-            if (!updateProduct) {
-                return res.status(404).send({ message: 'product not found' })
-            }
-            // بث إشعار بإزالة الطلب
-            const io = req.app.get('socketio');
-            io.emit('orderStatusUpdated', { id: updateProduct._id, status });
-            res.status(200).send({ message: 'product updated succesfuly', data: updateProduct })
-        } catch (err) {
-            console.log(err)
-            res.status(500).send({ message: "Eror ! can't updat the product ", data: err })
+// router.put('/:id',
+//     validatejwt
+//     , async (req, res) => {
+//         try {
+//             const { id } = req.params;
+//             const { status } = req.body;
+//             const order = await orderModel.findByIdAndUpdate(id, status, { new: true });
+//             if (!updateProduct) {
+//                 return res.status(404).send({ message: 'product not found' })
+//             }
+//             // بث إشعار بإزالة الطلب
+//             const io = req.app.get('socketio');
+//             io.emit('orderStatusUpdated', { id: order._id, status });
+//             res.status(200).send({ message: 'product updated succesfuly', data: order })
+//         } catch (err) {
+//             console.log(err)
+//             res.status(500).send({ message: "Eror ! can't updat the product ", data: err })
+//         }
+//     });
+
+router.put('/:id', validatejwt, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { status } = req.body;
+
+        // تعديل الكود هنا لتحديث status داخل كائن
+        const order = await orderModel.findByIdAndUpdate(id, { status: status }, { new: true });
+
+        if (!order) {  // التحقق من وجود الطلب وليس product
+            return res.status(404).send({ message: 'Order not found' });
         }
-        // const { id } = req.params;
 
-        // try {
-        //     // البحث عن الطلب وتحديث حالته
-        //     const order = await orderModel.findById(id);
-        //     if (!order) {
-        //         return res.status(404).send({ message: "Order not found" });
-        //     }
+        // بث إشعار بتحديث حالة الطلب
+        const io = req.app.get('socketio');
+        io.emit('orderStatusUpdated', { id: order._id, status });
 
-        //     order.status = status;
-        //     await order.save();
-
-        //     // بث إشعار بإزالة الطلب
-        //     io.emit('orderStatusUpdated', { id: order._id, status });
-
-        //     res.status(200).send(order);
-        // } catch (error) {
-        //     console.error(error);
-        //     res.status(500).send({ message: "Failed to update order status" });
-        // }
-    });
+        res.status(200).send({ message: 'Order updated successfully', data: order });
+    } catch (err) {
+        console.log(err);
+        res.status(500).send({ message: "Error! Can't update the order", data: err });
+    }
+});
 export default router;
