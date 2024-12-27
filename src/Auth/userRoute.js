@@ -71,26 +71,6 @@ router.get('/new-orders',
             res.status(500).send(err)
         }
     });
-router.get('/accepted-orders',
-    validatejwt
-    , async (req, res) => {
-        try {
-            const { data, statusCode } = await getAllOrders();
-
-            // تصفية الطلبات التي حالتها "accepted"
-            const filteredData = data.filter(order => order.status === "accepted");
-
-            // إرسال البيانات المصفاة
-            res.status(statusCode).send(filteredData);
-
-            // إخطار جميع العملاء بالطلبات الجديدة فقط
-            const io = req.app.get('socketio');
-            io.emit('ordersUpdated', filteredData); // إرسال الطلبات الجديدة فقط
-        } catch (err) {
-            console.log(err);
-            res.status(500).send(err)
-        }
-    });
 
 router.put('/:id', validatejwt, async (req, res) => {
     try {
