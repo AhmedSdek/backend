@@ -41,6 +41,21 @@ router.get('/all-orders',
     , async (req, res) => {
         try {
             const { data, statusCode } = await getAllOrders();
+            // إرسال البيانات المصفاة
+            res.status(statusCode).send(data);
+            // إخطار جميع العملاء بالطلبات الجديدة فقط
+            const io = req.app.get('socketio');
+            io.emit('ordersUpdated', data); // إرسال الطلبات الجديدة فقط
+        } catch (err) {
+            console.log(err);
+            res.status(500).send(err)
+        }
+    });
+router.get('/new-orders',
+    validatejwt
+    , async (req, res) => {
+        try {
+            const { data, statusCode } = await getAllOrders();
 
             // تصفية الطلبات التي حالتها "new"
             const filteredData = data.filter(order => order.status === "new");
@@ -56,25 +71,26 @@ router.get('/all-orders',
             res.status(500).send(err)
         }
     });
-// router.put('/:id',
-//     validatejwt
-//     , async (req, res) => {
-//         try {
-//             const { id } = req.params;
-//             const { status } = req.body;
-//             const order = await orderModel.findByIdAndUpdate(id, status, { new: true });
-//             if (!updateProduct) {
-//                 return res.status(404).send({ message: 'product not found' })
-//             }
-//             // بث إشعار بإزالة الطلب
-//             const io = req.app.get('socketio');
-//             io.emit('orderStatusUpdated', { id: order._id, status });
-//             res.status(200).send({ message: 'product updated succesfuly', data: order })
-//         } catch (err) {
-//             console.log(err)
-//             res.status(500).send({ message: "Eror ! can't updat the product ", data: err })
-//         }
-//     });
+router.get('/accepted-orders',
+    validatejwt
+    , async (req, res) => {
+        try {
+            const { data, statusCode } = await getAllOrders();
+
+            // تصفية الطلبات التي حالتها "accepted"
+            const filteredData = data.filter(order => order.status === "accepted");
+
+            // إرسال البيانات المصفاة
+            res.status(statusCode).send(filteredData);
+
+            // إخطار جميع العملاء بالطلبات الجديدة فقط
+            const io = req.app.get('socketio');
+            io.emit('ordersUpdated', filteredData); // إرسال الطلبات الجديدة فقط
+        } catch (err) {
+            console.log(err);
+            res.status(500).send(err)
+        }
+    });
 
 router.put('/:id', validatejwt, async (req, res) => {
     try {
