@@ -86,7 +86,7 @@ router.post('/checkout',
             const io = req.app.get('socketio');
             // استدعاء دالة checkout وتمرير io
             const { data, statusCode } = await checkout({ userId, address, phone, io });
-            io.emit('newOrder', data); // إرسال الطلب الجديد لكل المتصلين
+            io.emit('newOrders', data); // إرسال الطلب الجديد لكل المتصلين
 
             res.status(statusCode).send(data);
         } catch (err) {
