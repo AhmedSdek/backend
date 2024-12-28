@@ -56,7 +56,6 @@ router.get('/new-orders',
     , async (req, res) => {
         try {
             const { data, statusCode } = await getAllOrders();
-
             // تصفية الطلبات التي حالتها "new"
             const filteredData = data.filter(order => order.status === "new");
 
