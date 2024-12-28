@@ -14,6 +14,12 @@ const orderScema = new Schema({
     phone: { type: String, required: true },
     status: { type: String, required: true, default: 'new' },
     userId: { type: Schema.Types.ObjectId, ref: 'user', required: true },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    }
+}, {
+    timestamps: true
 });
 
 export const orderModel = mongoose.model('order', orderScema)

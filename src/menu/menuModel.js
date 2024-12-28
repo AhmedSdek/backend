@@ -15,7 +15,7 @@ const menuSchema = new mongoose.Schema({
     trending: {
         type: Boolean,
         required: true
-    },
+    }, 
     createdAt: {
         type: Date,
         default: Date.now
