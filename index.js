@@ -7,7 +7,7 @@ import userRouter from './src/Auth/userRoute.js';
 import cartRouter from './src/cart/cartRoute.js';
 import { Server } from "socket.io";
 import http from 'http'; // لإعداد خادم HTTP
-
+import cloudinary from 'cloudinary'
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -24,7 +24,27 @@ const io = new Server(server, {
     },
     transports: ["websocket", "polling"], // السماح بالنقل عبر WebSocket وPolling
 });
+// إعداد Cloudinary
+cloudinary.config({
+    cloud_name: 'dsy9h8z8d',
+    api_key: '226187663442894',
+    api_secret: 'UfAe2fbJKRFveccONXeGr5OFJds',
+});
 
+// API لحذف الصورة
+app.post('/delete-image', async (req, res) => {
+    const { publicId } = req.body;
+
+    try {
+        const result = await cloudinary.uploader.destroy(publicId);
+        if (result.result === 'ok') {
+            return res.status(200).json({ message: 'Image deleted successfully' });
+        }
+        return res.status(400).json({ message: 'Failed to delete image' });
+    } catch (error) {
+        return res.status(500).json({ message: 'Internal Server Error', error });
+    }
+});
 app.get("/", (req, res) => {
     res.send("Hello, World!");
 });
