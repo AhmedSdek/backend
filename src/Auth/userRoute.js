@@ -28,7 +28,7 @@ router.get('/users/:id', validatejwt, async (req, res) => {
 router.delete('/users/:id', validatejwt, async (req, res) => {
     try {
         const { id } = req.params;
-        const deletUser = await menuModel.findByIdAndDelete(id);
+        const deletUser = await userModel.findByIdAndDelete(id);
         if (!deletUser) {
             return res.status(404).send({ message: 'user not found' })
         }
