@@ -13,7 +13,7 @@ router.get('/all-users', validatejwt, async (req, res) => {
         console.log(err)
     }
 })
-router.get('/user/:id', validatejwt, async (req, res) => {
+router.get('/users/:id', validatejwt, async (req, res) => {
     try {
         const { id } = req.params;
         const user = await userModel.findById(id);
@@ -25,7 +25,7 @@ router.get('/user/:id', validatejwt, async (req, res) => {
         console.log(err)
     }
 })
-router.delete('/user/:id', validatejwt, async (req, res) => {
+router.delete('/users/:id', validatejwt, async (req, res) => {
     try {
         const { id } = req.params;
         const deletUser = await menuModel.findByIdAndDelete(id);
@@ -37,7 +37,7 @@ router.delete('/user/:id', validatejwt, async (req, res) => {
         console.log(err)
     }
 })
-router.put('/user/:id', validatejwt, async (req, res) => {
+router.put('/users/:id', validatejwt, async (req, res) => {
     try {
         const { id } = req.params;
         const updateUser = await menuModel.findByIdAndUpdate(id, req.body, { new: true });
