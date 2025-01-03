@@ -2,9 +2,17 @@ import express from 'express'
 import { Login, Register, getAllOrders, getMyOrders } from './userServices.js';
 import validatejwt from '../middleware/validatejwt.js';
 import { orderModel } from '../order/orderModel.js';
+import { userModel } from './userModel.js';
 
 const router = express.Router();
-
+router.get('/all-users', async (req, res) => {
+    try {
+        const users = await userModel.find();
+        res.status(200).send({ message: 'product fitch succesfuly', data: users })
+    } catch (err) {
+        console.log(err)
+    }
+})
 router.post('/register', async (req, res) => {
     try {
         const { firstName, lastName, email, password, role } = req.body
