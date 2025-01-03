@@ -40,7 +40,7 @@ router.delete('/users/:id', validatejwt, async (req, res) => {
 router.put('/users/:id', validatejwt, async (req, res) => {
     try {
         const { id } = req.params;
-        const updateUser = await menuModel.findByIdAndUpdate(id, req.body, { new: true });
+        const updateUser = await userModel.findByIdAndUpdate(id, req.body, { new: true });
         if (!updateUser) {
             return res.status(404).send({ message: 'user not found' })
         }
