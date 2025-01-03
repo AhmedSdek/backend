@@ -13,6 +13,44 @@ router.get('/all-users', validatejwt, async (req, res) => {
         console.log(err)
     }
 })
+router.get('/user/:id', validatejwt, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const user = await userModel.findById(id);
+        if (!user) {
+            return res.status(404).send({ message: 'user not found' })
+        }
+        res.status(200).send({ message: 'user fitch succesfuly', data: user })
+    } catch (err) {
+        console.log(err)
+    }
+})
+router.delete('/user/:id', validatejwt, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const deletUser = await menuModel.findByIdAndDelete(id);
+        if (!deletUser) {
+            return res.status(404).send({ message: 'user not found' })
+        }
+        res.status(200).send({ message: 'user fitch succesfuly', data: deletUser })
+    } catch (err) {
+        console.log(err)
+    }
+})
+router.put('/user/:id', validatejwt, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const updateUser = await menuModel.findByIdAndUpdate(id, req.body, { new: true });
+        if (!updateUser) {
+            return res.status(404).send({ message: 'user not found' })
+        }
+        res.status(200).send({ message: 'user fitch succesfuly', data: updateUser })
+    } catch (err) {
+        console.log(err)
+    }
+})
+
+
 router.post('/register', async (req, res) => {
     try {
         const { firstName, lastName, email, password, role } = req.body
@@ -31,6 +69,7 @@ router.post('/login', async (req, res) => {
         console.log(err)
     }
 })
+
 
 router.get('/my-orders',
     validatejwt

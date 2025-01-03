@@ -52,6 +52,7 @@ export const updateSelectedProduct = async (req, res) => {
         res.status(500).send({ message: "Eror ! can't updat the product ", data: err })
     }
 }
+
 export const deleteSelectedProduct = async (req, res) => {
     try {
         const { id } = req.params;
