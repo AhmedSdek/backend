@@ -68,7 +68,7 @@ export const getAllOrders = async () => {
 // جدولة وظيفة يومية
 cron.schedule('* * * * *', async () => {
     try {
-        const oneWeekAgo = new Date(Date.now() - 10 * 60 * 60 * 1000);
+        const oneWeekAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
         const result = await orderModel.deleteMany({ createdAt: { $lte: oneWeekAgo } });
         console.log(`${result.deletedCount} orders deleted.`);
     } catch (err) {
