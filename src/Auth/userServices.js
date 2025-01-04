@@ -79,7 +79,9 @@ export const Register = async ({ firstName, lastName, email, password, role }) =
             text: `Please click the following link to verify your email: ${verificationLink}`,
         });
 
-        return { data: 'User registered successfully. Please verify your email.', statusCode: 200 };
+        return {
+            data: { token: generateJWT({ email }), firstName, lastName, role }, statusCode: 200
+        };
     } catch (err) {
         console.log(err);
         return { data: 'Error during registration', statusCode: 500 };
