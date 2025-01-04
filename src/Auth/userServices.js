@@ -2,6 +2,7 @@ import { userModel } from "./userModel.js";
 import bcrypt from "bcrypt";
 import jwt from 'jsonwebtoken';
 import { orderModel } from "../order/orderModel.js";
+import cron from 'node-cron'
 export const Register = async ({ firstName, lastName, email, password, role }) => {
     try {
         const findUser = await userModel.findOne({ email: email });
@@ -64,15 +65,16 @@ export const getAllOrders = async () => {
         // res.status(500).send(err)
     }
 }
-// export const updateOrder = async () => {
-//     try {
-//         return { data: await orderModel.find(), statusCode: 200 }
-//     } catch (err) {
-//         console.log(err)
-//         return { data: 'wrong Login', statusCode: 500 }
-//         // res.status(500).send(err)
-//     }
-// }
+// جدولة وظيفة يومية
+cron.schedule('* * * * *', async () => {
+    try {
+        const oneWeekAgo = new Date(Date.now() - 10 * 60 * 60 * 1000);
+        const result = await orderModel.deleteMany({ createdAt: { $lte: oneWeekAgo } });
+        console.log(`${result.deletedCount} orders deleted.`);
+    } catch (err) {
+        console.error('Error deleting old orders:', err);
+    }
+});
 const generateJWT = (data) => {
     return jwt.sign(data, process.env.JWT_SECRET || 'AhmedSdek1308#')
 }
