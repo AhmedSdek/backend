@@ -72,7 +72,7 @@ export const Register = async ({ firstName, lastName, email, password, role }) =
         await newUser.save();
 
         // إرسال بريد التحقق
-        const verificationLink = `http://http://localhost:5173/verify-email?token=${verificationToken}`;
+        const verificationLink = `http://localhost:5173/verify-email?token=${verificationToken}`;
         await sendEmail({
             to: email,
             subject: "Verify Your Email",
