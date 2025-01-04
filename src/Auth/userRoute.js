@@ -165,6 +165,7 @@ router.post("/request-password-reset", async (req, res) => {
         }
         // إنشاء رمز إعادة التعيين
         const resetToken = crypto.randomBytes(32).toString("hex");
+        console.log(resetToken)
         user.resetPasswordToken = resetToken;
         user.resetPasswordExpires = Date.now() + 3600000; // صالح لمدة ساعة واحدة
         await user.save();
@@ -185,7 +186,7 @@ router.post("/request-password-reset", async (req, res) => {
                     <a href="${resetLink}">${resetLink}</a>`,
         });
 
-        res.status(200).json({ message: "Password reset link sent to email" });
+        res.status(200).json({ message: "Password reset link sent to email", data: resetToken });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Error sending reset email" });
