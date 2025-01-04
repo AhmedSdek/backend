@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken';
 import { orderModel } from "../order/orderModel.js";
 import cron from 'node-cron'
 import sendEmail from "./sendEmail.js";
+
 // export const Register = async ({ firstName, lastName, email, password, role }) => {
 //     try {
 //         const findUser = await userModel.findOne({ email: email });

@@ -3,7 +3,9 @@ import { Login, Register, getAllOrders, getMyOrders, verifyEmail } from './userS
 import validatejwt from '../middleware/validatejwt.js';
 import { orderModel } from '../order/orderModel.js';
 import { userModel } from './userModel.js';
-
+import crypto from 'crypto';
+import bcrypt from 'bcrypt'
+import nodemailer from 'nodemailer'
 const router = express.Router();
 router.get('/all-users', validatejwt, async (req, res) => {
     try {
@@ -148,6 +150,71 @@ router.put('/:id', validatejwt, async (req, res) => {
     } catch (err) {
         console.log(err);
         res.status(500).send({ message: "Error! Can't update the order", data: err });
+    }
+});
+
+
+
+router.post("/request-password-reset", async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        const user = await userModel.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        // إنشاء رمز إعادة التعيين
+        const resetToken = crypto.randomBytes(32).toString("hex");
+        user.resetPasswordToken = resetToken;
+        user.resetPasswordExpires = Date.now() + 3600000; // صالح لمدة ساعة واحدة
+        await user.save();
+        // إرسال البريد الإلكتروني
+        const resetLink = `http://mern-front-teal.vercel.app/reset-password?token=${resetToken}`;
+        const transporter = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS,
+            },
+        });
+
+        await transporter.sendMail({
+            to: email,
+            subject: "Reset Your Password",
+            html: `<p>Click the link below to reset your password:</p>
+                    <a href="${resetLink}">${resetLink}</a>`,
+        });
+
+        res.status(200).json({ message: "Password reset link sent to email" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error sending reset email" });
+    }
+});
+router.post("/reset-password", async (req, res) => {
+    const { token } = req.query;
+    const { newPassword } = req.body;
+
+    try {
+        const user = await userModel.findOne({
+            resetPasswordToken: token,
+            resetPasswordExpires: { $gt: Date.now() }, // التحقق من أن التوكن صالح
+        });
+
+        if (!user) {
+            return res.status(400).json({ message: "Invalid or expired token" });
+        }
+
+        // تحديث كلمة المرور
+        user.password = await bcrypt.hash(newPassword, 10);
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpires = undefined;
+        await user.save();
+
+        res.status(200).json({ message: "Password reset successfully" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error resetting password" });
     }
 });
 export default router;
