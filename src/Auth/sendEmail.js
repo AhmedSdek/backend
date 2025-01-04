@@ -18,7 +18,13 @@ const sendEmail = async ({ to, subject, text }) => {
         subject,
         html: `<p>${text}</p>`,
     };
-    return transporter.sendMail(mailOptions);
+    try {
+        const info = await transporter.sendMail(mailOptions);
+        console.log("Email sent: " + info.response); // هذه السطر يمكن أن يساعدك في التحقق من نجاح الإرسال
+    } catch (error) {
+        console.log("Error sending email: ", error); // سجل الخطأ إذا حدث
+    }
+    // return transporter.sendMail(mailOptions);
 };
 
 export default sendEmail;
