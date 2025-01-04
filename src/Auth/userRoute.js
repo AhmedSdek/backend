@@ -13,6 +13,15 @@ router.get('/all-users', validatejwt, async (req, res) => {
         console.log(err)
     }
 })
+router.get('/my-user', validatejwt, async (req, res) => {
+    try {
+        const userId = req.user._id;
+        const user = await userModel.findOne({ userId });
+        res.status(200).send({ message: 'product fitch succesfuly', data: user })
+    } catch (err) {
+        console.log(err)
+    }
+})
 router.get('/users/:id', validatejwt, async (req, res) => {
     try {
         const { id } = req.params;
