@@ -1,5 +1,5 @@
 import express from 'express'
-import { Login, Register, getAllOrders, getMyOrders } from './userServices.js';
+import { Login, Register, getAllOrders, getMyOrders, verifyEmail } from './userServices.js';
 import validatejwt from '../middleware/validatejwt.js';
 import { orderModel } from '../order/orderModel.js';
 import { userModel } from './userModel.js';
@@ -49,7 +49,8 @@ router.put('/users/:id', validatejwt, async (req, res) => {
         console.log(err)
     }
 })
-
+// مسار التحقق من البريد
+router.get("/verify-email", verifyEmail);
 
 router.post('/register', async (req, res) => {
     try {
