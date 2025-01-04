@@ -80,7 +80,7 @@ export const Register = async ({ firstName, lastName, email, password, role }) =
         });
 
         return {
-            data: { token: generateJWT({ email }), firstName, lastName, role }, statusCode: 200
+            data: generateJWT({ email, firstName, lastName, role }), statusCode: 200
         };
     } catch (err) {
         console.log(err);
@@ -127,7 +127,7 @@ export const verifyEmail = async (req, res) => {
         });
 
         if (!user) {
-            return res.status(400).json({ message: `Invalid or expired token ${user}` });
+            return res.status(400).json({ message: `Invalid or expired token` });
         }
 
         user.isVerified = true; // حدد المستخدم كمُحقق
