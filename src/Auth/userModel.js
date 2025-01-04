@@ -58,6 +58,8 @@ const userSchema = new mongoose.Schema({
     verificationTokenExpiresAt: {
         type: Date, // تاريخ انتهاء صلاحية رمز التحقق
     },
+    resetPasswordToken: { type: String }, // الرمز المستخدم لإعادة تعيين كلمة المرور
+    resetPasswordExpires: { type: Date }, // تاريخ انتهاء صلاحية الرمز
 }, {
     timestamps: true, // لإنشاء الحقلين createdAt و updatedAt تلقائيًا
 });
