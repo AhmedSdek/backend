@@ -123,7 +123,7 @@ export const verifyEmail = async (req, res) => {
     try {
         const user = await userModel.findOne({
             verificationToken: token,
-            verificationTokenExpiresAt: { $gt: Date.now() }, // تحقق من صلاحية الرمز
+            // verificationTokenExpiresAt: { $gt: Date.now() }, // تحقق من صلاحية الرمز
         });
 
         if (!user) {
