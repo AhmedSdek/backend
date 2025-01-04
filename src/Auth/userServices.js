@@ -101,7 +101,11 @@ export const Login = async ({ email, password }) => {
         const passwordMatch = await bcrypt.compare(password, findUser.password);
         if (passwordMatch) {
             return {
-                data: 'done',
+                data: generateJWT({
+                    email, firstName: findUser.firstName,
+                    lastName: findUser.lastName,
+                    role: findUser.role,
+                }),
                 statusCode: 200,
             };
         }
