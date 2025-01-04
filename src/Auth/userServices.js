@@ -67,7 +67,7 @@ export const Register = async ({ firstName, lastName, email, password, role }) =
             password: hashdPassword,
             role,
             verificationToken: verificationToken,
-            verificationTokenExpiresAt,
+            verificationTokenExpiresAt: verificationTokenExpiresAt,
         });
         await newUser.save();
 
