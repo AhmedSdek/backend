@@ -1,19 +1,19 @@
 import nodemailer from "nodemailer";
-import dotenv from "dotenv";
+// import dotenv from "dotenv";
 
 // تحميل المتغيرات من ملف .env
-dotenv.config();
+// dotenv.config();
 const transporter = nodemailer.createTransport({
     service: "gmail", // أو SMTP حسب مزود البريد
     auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
+        user: "asdek229@gmail.com",
+        pass: "wizb eshh oofk rwov",
     },
 });
 
 const sendEmail = async ({ to, subject, text }) => {
     const mailOptions = {
-        from: process.env.EMAIL_USER,
+        from: "asdek229@gmail.com",
         to,
         subject,
         html: `<p>${text}</p>`,
