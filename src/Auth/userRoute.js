@@ -203,7 +203,7 @@ router.post("/reset-password", async (req, res) => {
         });
 
         if (!user) {
-            return res.status(400).json({ message: "Invalid or expired token" });
+            return res.status(400).json({ message: "Invalid or expired token", data: token });
         }
 
         // تحديث كلمة المرور
