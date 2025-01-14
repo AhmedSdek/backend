@@ -81,13 +81,11 @@ router.post('/checkout',
             const { address, phone } = req.body;
             // const response = await checkout({ userId, address, phone });
             // res.status(response.statusCode).send(response.data);
-
             // الحصول على كائن Socket.IO
             const io = req.app.get('socketio');
             // استدعاء دالة checkout وتمرير io
             const { data, statusCode } = await checkout({ userId, address, phone, io });
             io.emit('newOrders', data); // إرسال الطلب الجديد لكل المتصلين
-
             res.status(statusCode).send(data);
         } catch (err) {
             console.log(err)
